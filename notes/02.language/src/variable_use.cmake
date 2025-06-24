@@ -1,0 +1,5 @@
+message("CMAKE_ARGC = ${CMAKE_ARGC}")
+message("CMAKE_ARGV0 = ${CMAKE_ARGV0}")
+message("CMAKE_ARGV1 = ${CMAKE_ARGV1}")
+message("CMAKE_ARGV2 = ${CMAKE_ARGV2}")
+message("CMAKE_ARGV3 = ${CMAKE_ARGV3}  # no error on undefined variable")

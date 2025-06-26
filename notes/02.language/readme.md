@@ -115,3 +115,29 @@ if(DEFINED variable_name)
 if(DEFINED ENV{variable_name})
 if(DEFINED CACHE{variable_name})
 ```
+
+### Comparison operators
+The keywords `EQUAL`, `LESS`, `LESS_EQUAL`, `GREATER`, `GREATER_EQUAL` allow to
+compare numbers. Prepending `VERSION_` prefix to each of the above compares
+version numbers. Prepending the `STR` prefix (no underscore) allows for a
+lexigraphical comparisons. Regex match is allowed in the form
+```cmake
+<variable|string> MATCHES regex
+```
+groups are assiged to `CMAKE_MATCH_n` variables.
+
+Finally, there is a `PATH_EQUAL` that collapses multiple `/` symbols.
+
+### Simple checks
+```cmake
+if(<string|variable> IN_LIST my_list)
+if(COMMAND <command name>)  # check if <command name> exists and can be called
+if(POLICY <policy id>)
+if(TEST <test name>)
+if(TARGET <target name>)
+if(EXISTS <abs-path-or-filepath>)
+if(<file> IS_NEWER_THAN <file>)  # true also if any does not exist
+if(IS_DIRECTORY <path>)
+if(IS_SYMLINK <path>)
+if(IS_ABSOLUTE <path>)
+```

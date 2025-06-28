@@ -120,11 +120,11 @@ if(DEFINED CACHE{variable_name})
 The keywords `EQUAL`, `LESS`, `LESS_EQUAL`, `GREATER`, `GREATER_EQUAL` allow to
 compare numbers. Prepending `VERSION_` prefix to each of the above compares
 version numbers. Prepending the `STR` prefix (no underscore) allows for a
-lexigraphical comparisons. Regex match is allowed in the form
+lexicographical comparisons. Regex match is allowed in the form
 ```cmake
 <variable|string> MATCHES regex
 ```
-groups are assiged to `CMAKE_MATCH_n` variables.
+groups are assigned to `CMAKE_MATCH_n` variables.
 
 Finally, there is a `PATH_EQUAL` that collapses multiple `/` symbols.
 
@@ -141,3 +141,68 @@ if(IS_DIRECTORY <path>)
 if(IS_SYMLINK <path>)
 if(IS_ABSOLUTE <path>)
 ```
+
+## Loops
+Everything in CMake is a command. The commands for loops available in CMake are
+the `while(<condition>)`, `endwhile()` pair, for a while loop.
+
+The second type of loops provided by CMake are the `foreach(...)`,
+`endforeach()` pairs. There are many flavors of the `foreach` command. The most
+valuable one is likely the following
+```cmake
+foreach(var IN LISTS myList0 myList1 ITEMS item0 item1 item2)
+```
+
+The loops don't create local scope, yet, the loop variables of `foreach` are
+restricted to the local scope of the loop.
+
+## New Commands
+Users may define two types of commands: functions and macros. Inside the bodies
+of these custom commands CMake provides the following variables
+```cmake
+ARGC  # number of arguments passed to the command
+ARGV  # a list of arguments passed to the command
+ARGV<n>  # the nth argument passed to the command
+ARGN  # a list of anonymous arguments passed to the command after the last
+      # named argument
+```
+
+Functions create local scope. In that scope, CMake provides the following
+variables
+```cmake
+CMAKE_CURRENT_FUNCTION
+CMAKE_CURRENT_FUNCTION_LIST_DIR
+CMAKE_CURRENT_FUNCTION_LIST_FILE
+CMAKE_CURRENT_FUNCTION_LIST_LINE
+```
+
+## Popular Commands
+### `message`
+User may provide as the first argument to the command the MODE, which would be
+one of: `FATAL_ERROR`, `SEND_ERROR`, `WARNING`, `AUTHOR_WARNING`, `DEPRECATION`,
+`NOTICE` (default), `STATUS` (recommended for messages to the user), `VERBOSE`,
+`DEBUG`, `TRACE`.
+
+The `DEPRECATION` type of message behaves different depending on which of
+`CMAKE_ERROR_DEPRECATION` or `CMAKE_WARN_DEPRECATION` variables is set.
+
+The `CMAKE_MESSAGE_CONTEX` and `CMAKE_MESSAGE_INDENT` lists add extra level of
+control in printing. The contex is printed when the cmake executable receives
+the `--log-contex` flag.
+
+### `include`
+Run cmake code from external file in the current scope.
+```cmake
+include(<file|module> [OPTIONAL] [RESULT_VARIABLE <var>])
+```
+Specifying `OPTIONAL` will stop CMake from raising an error if the file is not
+found. The `RESULT_VARIABLE` says if the include was a sucess, if so, the
+`<var>` will store the absolute path to the included file, otherwise `<var>`
+will be set to `NOTFOUND`.
+
+`<file>` should be a full file name. Relative paths will be resolved with
+respect to current working directory, not the file itself. Fix it with
+`${CMAKE_CURRENT_LIST_DIR}/<file>`.
+
+In case of `<module>`, the `<module>.cmake` file will be searched.
+`CMAKE_MODULE_PATH` will be searched first.

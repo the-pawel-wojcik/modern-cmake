@@ -18,3 +18,8 @@ Calling the `project` command populates following variables `PROJECT_NAME`,
 `<project name>_SOURCE_DIR`, `PROJECT_BINARY_DIR`, `<project name>_BINARY_DIR`.
 
 Simiarily, specifying the other argumens will set additional variables.
+
+## Cross compilation
+Set the `CMAKE_SYSTEM_NAME` and `CMAKE_SYSTEM_VERSION` to the desired system
+(target system). The machine where the compilation takes place is called host,
+and uses the corresponding variables containing the `HOST` string.

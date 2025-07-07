@@ -44,3 +44,40 @@ cd build
 cmake --graphviz=test.doc .
 ```
 view the result with `https://dreampuf.github.io/GraphvizOnline`
+
+## Target properties
+To view or set target properties use
+```cmake
+get_target_property(var target property)
+set_target_properties(target... PROPERTY
+    property_name value
+    property_name value ...
+)
+```
+There are also more general, lower-level commands that can acheive similar
+results
+```cmake
+get_property(var TARGET target PROPERTY property_name)
+set_property(TARGET target PROPERTY property_name value)
+```
+
+A few popular properties `COMPILE_{DEFINITIONS,FEATURES,OPTIONS}`,
+`INCLUDE_DIRECTORIES`, `LINK_{DEPENDS,DIRECTORIES,LIBRARIES,OPTIONS}`,
+`POSITION_INDEPENDENT_CODE`, `PRECOMPILE_HEADERS`, `SOURCES`.
+
+## Build dependecies
+Use
+```cmake
+target_link_libraries(target
+    PUBLIC | PRIVATE | INTERFACE item...
+    ...
+)
+```
+
+If a target depends on two items with conflicting property CMake produces an
+error. To resolve such problems a custom property might be used, e.g.,
+```cmake
+set_target_properties(target PROPERTY INTERFACE_LIBRARY_VERSION 3.13)
+```
+to propagate the property the property name needs to be appended to one of
+`COMPATIBLE_INTERFACE_{BOOL,STRING,NUMBER_{MAX,MIN}}`

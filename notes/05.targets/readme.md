@@ -81,3 +81,30 @@ set_target_properties(target PROPERTY INTERFACE_LIBRARY_VERSION 3.13)
 ```
 to propagate the property the property name needs to be appended to one of
 `COMPATIBLE_INTERFACE_{BOOL,STRING,NUMBER_{MAX,MIN}}`
+
+## Custom command
+A concept similar to custom target
+```cmake
+add_custom_command(
+    OUTPUT output...
+    COMMAND command [ARGS args...]
+    ...
+    [MAIN_DEPENDENCY dependency]
+    [DEPNEDS [depends...]]
+    [BYPRODUCTS [files...]]
+    [IMPLICIT_DEPENDS <lang1> depend1]
+    [WORKING_DIRECTORY dir]
+    [COMMENT comment]
+    [DEPTFILE depfile]
+    [JOB_POOL job_pool]
+    [VERBATIM] [APPEND] [USES_TERMINAL]
+    [COMMAND_EXPAND_LISTS]
+)
+```
+The other format of the `add_custom_command` enables target hooks.
+```cmake
+add_custom_command(
+    TARGET target PRE_BUILD | PRE_LINK | POST_BUILD
+    <the rest>
+)
+```

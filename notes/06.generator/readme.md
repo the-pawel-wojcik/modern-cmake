@@ -108,3 +108,34 @@ target_compile_definitions(target PRIVATE
     $<IF:$<COMPILE_LANG_AND_ID:C,Clang>,C_Clang,>
 )
 ```
+
+There are any target-related generator expressions. The `$<TARGET_FILE...>`
+generator expressions query pahts of the target artifact. `$<TARGET_...>`
+produce existence checks, object files, ... . There are many generator
+expressions supporting installs and libraries.
+
+Finally, there are also escape sequences: `$<ANGLE-R>`, `$<COMMA>`,
+`$<SEMICOLON>`.
+
+### Testing the generator expressions
+Since `message()` command is executed at the configuration-time, the generator
+expressions won't work with it. To see the result of the generator expression
+there are two tricks. The first one writes to a file
+```cmake
+file(GENERATE OUTPUT filename CONTENT "$<...>")
+```
+The second one requires calling a special target from the command line
+```cmake
+add_custom_target(gendbg COMMAND ${CMAKE_COMMAND} -E echo "$<...>")
+```
+Even with this two tricks, not all generator expressions may be viewed, as some
+of them depend on the target.
+
+## Examples
+Add a compiler-specific compile options through an interface library
+```cmake
+add_library(enable_rtti INTERFACE)
+target_compile_options(enable_rtti INTERFACE
+    $<IF:$<OR:$<COMPILER_ID:GCC>,$<COMPILER_ID,Clang>>,-rtti,>
+)
+```

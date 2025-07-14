@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.30)
+project(Flags LANGUAGES CXX)
+
+message(STATUS "CMAKE_CXX_FLAGS_*")
+message(STATUS "RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
+message(STATUS "DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")

@@ -68,3 +68,37 @@ manually specified directories will be checked before or after the default ones
 The `SYSTEM` keyword specifies that the directories should be treated as
 standard system directories. Many compiles use the `-isystem` flag for this
 purpose.
+
+## Optimalizations
+The compiler optimizations are configured with the compiler flags
+```cmake
+target_compile_options(target [BEFORE]
+    PRIVATE | PUBLIC | INTERFACE flag...
+    ...
+)
+```
+The `BEFORE` keyword will prepend the options to the flag list, as sometimes the
+order matters.
+
+Levels of optimization:
+- O0, no optimizations
+- O2, full optimization
+- O3, full optimization with more aggressive inlining and loop vectorization
+- Ofast, -O3 plus optimization's that don't comply with the standard, might
+  break precision as it uses `-ffinite-math` and `-ffast-math`.
+
+CMake has a few pre-configurations saved. See `CMAKE_CXX_FLAGS_DEBUG`,
+`CMAKE_CXX_FLAGS_RELEASE`, and other `CMAKE_<LANG>_FLAGS_<CONFIG>` global
+variables. The per-target granular control is recommended over the global
+settings.
+
+The `-On` flags are "meta-flags" that set a series of more fine-tuned
+optimization options. These fine-tuned optimization options can be controlled
+with the `-f<option>` and `-fno<option>` for activating and deactivating,
+respectively, the desired optimization. These more granular flags may depend on
+the compiler used, e.g.,
+ - `-finline-functions-called-once`: GCC
+ - `-finline-functions`: GCC and Clang
+ - `-finline-hint-functions`: Clang
+ - `-floop-unroll`: GCC
+ - `-funroll-loops`: Clang

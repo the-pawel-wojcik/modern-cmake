@@ -1,0 +1,5 @@
+#cmakedefine DISABLE_IN_FILES
+#cmakedefine ENABLE_IN_FILES
+#cmakedefine VARIABLE "@VARIABLE@"
+#cmakedefine NUMBER ${NUMBER}
+#cmakedefine IN_UNDEFINED "${UNDEFINED}"

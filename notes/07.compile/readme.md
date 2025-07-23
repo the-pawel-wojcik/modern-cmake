@@ -102,3 +102,40 @@ the compiler used, e.g.,
  - `-finline-hint-functions`: Clang
  - `-floop-unroll`: GCC
  - `-funroll-loops`: Clang
+
+### Unity Builds
+Enable unity builds with
+```sh
+cmake -D CMAKE_UNITY_BUILD:BOOL=ON
+```
+If parts of your code break with unity builds, disable them with
+```cmake
+set_target_properties(target... PROPERTIES UNITY_BUILD false)
+```
+
+## Debugging
+### Compiler flags
+The compiler flags `-Wall` and `-Wextra` will produces warnings that are worth
+addressing right away. The next level is `-Wpedantic` which flags non-standard
+use of C or C++. Setting `-Werror` turns warnings into errors; this flags is
+recommended for development of public libraries. Read the manual of your
+compiler to learn about the remaining flags.
+
+### Compilation intermediates
+Use the `-save-temps=obj` flag to save the output of preprocessor (`<build
+tree>/CMakeFiles/<target>.dir/<source>.ii`) and the output of the linguistic
+analysis stage to a file (`the/same/<source>.s`).
+
+### Precise include paths
+The `-H` flag lists the included paths
+```cmake
+target_compile_options(target PRIVATE -H)
+```
+
+### Debug symbols
+CMake sets different default flags for different builds, e.g.,
+`CMAKE_CXX_FLAGS_DEBUG` contains the `-g` flag, which includes the debug symbols
+in the final executable, while `CMAKE_CXX_FLAGS_RELEASE` would define `-DNDEBUG`
+variable, which is used in macros like `assert` from `assert.h`, which some
+programs use to remove the parts of its functionality that is designed for debug
+purposes.

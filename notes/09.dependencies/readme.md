@@ -4,6 +4,9 @@ CMake's `find_package` is the recommended command
 ```cmake
 find_package(name [version] [EXACT] [QUIET] [REQUIRED])
 ```
+if the package is found the variables such as `name_INCLUDES` or
+`name_LIBRARIES` are set and possibly event imported targets like
+`name::name` become accessible.
 
 The `find_package` would also work with find-modules and config-modules.
 
@@ -13,7 +16,6 @@ CMake projects.
 If a package does not provide a config-module, one may write a find-module which
 would live separate from the wanted package, but it would enable the integration
 of the wanted package into a CMake project.
-
 
 ### Writing a custom find module
 A find-module searches for a package files and sets appropriate variables and
@@ -52,3 +54,14 @@ Call CMake with an additional flag
 ```bash
 cmake -S src -B build --debug-find-pkg=PACKAGE_NAME
 ```
+
+## Using dependencies unavailable at the system
+The go-to options is the `FetchContent` module, a user-friendly wrapper around
+the `ExternalProject` module. `FetchContent` works at configuration stage, while
+`ExternalProject` works at the build stage.
+
+### `FetchContent`
+Three steps:
+1. `include(FetchContent)`.
+2. `FetchContent_Declare()`.
+3. `FetchContent_MakeAvailable()`.

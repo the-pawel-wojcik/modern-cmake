@@ -2,3 +2,4 @@ packt_publishing
 build
 release
 debug
+compile_commands.json

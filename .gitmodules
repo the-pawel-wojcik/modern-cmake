@@ -1,0 +1,3 @@
+[submodule "packt"]
+	path = packt
+	url = https://github.com/PacktPublishing/Modern-CMake-for-Cpp-2E
